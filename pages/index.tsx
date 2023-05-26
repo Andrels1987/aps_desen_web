@@ -4,7 +4,7 @@ import ModalResetPassword from "@/components/modalResetPassword";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "../public/logo.png"
-import { GlobalContext} from  "./context/GlobalContext.js"
+import {GlobalContext} from  "@/pages/context/GlobalContext.js"
 const Login = ()=>{
     const [formSignIn, setFormSignIn] = useState({
         email:"",

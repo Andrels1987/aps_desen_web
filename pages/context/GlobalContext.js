@@ -33,7 +33,7 @@ const database = getDatabase(app);
 
 export const GlobalContext = createContext();
 
-export const GlobalStorage = ({children})=>{
+const GlobalStorage = ({children})=>{
     return(
         <GlobalContext.Provider 
             value={{ 
@@ -54,3 +54,5 @@ export const GlobalStorage = ({children})=>{
         </GlobalContext.Provider>
     )
 }
+
+export default GlobalStorage;

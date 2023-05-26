@@ -2,7 +2,7 @@
 
 import { GameContext } from "../context/GameContext"
 import { useRouter } from "next/router";
-import { GlobalContext } from "@/pages/context/GlobalContext"
+import  {GlobalContext}  from "@/pages/context/GlobalContext"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useContext, useState, useEffect } from "react";

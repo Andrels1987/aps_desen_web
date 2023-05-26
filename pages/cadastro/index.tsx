@@ -2,7 +2,8 @@ import { useState, useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../../public/logo.png"
-import { GlobalContext } from "../context/GlobalContext.js";
+import { GlobalContext } from "@/pages/context/GlobalContext";
+
 import ModalEmailConfirmation from "../../components/ModalEmailConfirmation";
 
 const Cadastro = () => {
