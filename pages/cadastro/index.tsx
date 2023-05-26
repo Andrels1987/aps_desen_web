@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import sogeloLogo from "../../public/sogeloLogo.png";
+import logo from "../../public/logo.png";
 import { GlobalContext } from "../context/GlobalContext.js";
 import ModalEmailConfirmation from "../../components/ModalEmailConfirmation";
 
@@ -60,7 +60,7 @@ const Cadastro = () => {
             width={300}
             height={300}
             alt="bola de futebol"
-            src={sogeloLogo}
+            src={logo}
           />
           <div className="max-w-md mx-auto">
             <div>

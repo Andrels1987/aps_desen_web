@@ -17,30 +17,6 @@ import {
     {Qid:4,question:'what is solid js',rightAnswer: 'is a JavaScript framework that supports binding data to elements that it then syncs and displays on web pages', answers: [{id:1,answer:'Codigo para compilar javascript'},{id:2, answer: 'is a JavaScript framework that supports binding data to elements that it then syncs and displays on web pages'},{id:3, answer:'Framework usado para criar REST APIs'}]},
 ] */
 
-const q1 = {
-    Qid:4,
-    question:'what is solid js',
-    rightAnswer: 'is a JavaScript framework that supports binding data to elements that it then syncs and displays on web pages',
-    answers: [
-        {id:1,answer:'Codigo para compilar javascript'},
-        {id:2, answer: 'is a JavaScript framework that supports binding data to elements that it then syncs and displays on web pages'},
-        {id:3, answer:'Framework usado para criar REST APIs'}
-    ]
-}
-
-function writePerguntas(id) {
-    set(ref(db, 'questions/' + id), {
-        
-        question:'what is solid js',
-        rightAnswer: 'is a JavaScript framework that supports binding data to elements that it then syncs and displays on web pages',
-        answers: [
-            {id:1,answer:'Codigo para compilar javascript'},
-            {id:2, answer: 'is a JavaScript framework that supports binding data to elements that it then syncs and displays on web pages'},
-            {id:3, answer:'Framework usado para criar REST APIs'}
-        ]
-        
-    });
-}
 
 export const GameContext = createContext();
 

@@ -37,7 +37,7 @@ const Login = ()=>{
 
     useEffect(()=>{
 
-        auth.onAuthStateChanged(( user:any) => {
+       return auth.onAuthStateChanged(( user:any) => {
             user && router.push("/game")
         })
     },[])
