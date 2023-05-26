@@ -11,6 +11,9 @@ import { useContext, useState, useEffect } from "react";
 
 const Home = () => {
   const { life, QandA, setLife, score, setScore } = useContext(GameContext);
+  const { user } = useContext(GlobalContext);
+
+ 
 
   const [item, setItem] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
@@ -23,6 +26,9 @@ const Home = () => {
   }
 
   useEffect(() => {
+    if(!user){
+      console.log("USER " ,user);    
+    }
     const handleWindow = () => {
       window.addEventListener('resize', () => {
         let menu = document.querySelector("#mobile-menu")! as HTMLElement;
@@ -239,19 +245,19 @@ const Home = () => {
               <div
                 className="max-w-sm rounded overflow-hidden shadow-lg "
                 style={{
-                  height: "60%",
+                  height: "70%",
                   width: "93%",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   backgroundColor: "#FFFFFF",
                   position: "absolute",
-                  top: "25%",
-                  zIndex: "1",
+                  top: "15%",
+                  zIndex: "1"
                 }}
               >
                 <div className="px-6 py-4">
-                  <div className="font-bold  mb-2 text-green-500 text-4xl question">
+                  <div className="font-bold  mb-1 text-green-500 text-4xl question">
                     {QandA[item].question} ?
                   </div>
                   <div className="font-bold text-xl mb-2 ">
