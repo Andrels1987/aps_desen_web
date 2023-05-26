@@ -38,9 +38,7 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 
-const auth = getAuth(app)
 
-const database = getDatabase(app);
 
 
 export const GameContext = createContext();
@@ -54,7 +52,7 @@ const GameProvider = ({ children }) => {
 useEffect(() => {
     
     const data = []    
-    const db = getDatabase();
+    const db = getDatabase(app);
         const postListRef =  ref(db, 'questions');
         onValue(postListRef, (snapshot) => {
             snapshot.forEach((childSnapshot) => {
