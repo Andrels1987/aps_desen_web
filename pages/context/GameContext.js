@@ -29,21 +29,19 @@ const q1 = {
 }
 
 function writePerguntas(id) {
-    const db = getDatabase();
     set(ref(db, 'questions/' + id), {
         
-            question:'what is solid js',
-            rightAnswer: 'is a JavaScript framework that supports binding data to elements that it then syncs and displays on web pages',
-            answers: [
-                {id:1,answer:'Codigo para compilar javascript'},
-                {id:2, answer: 'is a JavaScript framework that supports binding data to elements that it then syncs and displays on web pages'},
-                {id:3, answer:'Framework usado para criar REST APIs'}
-            ]
+        question:'what is solid js',
+        rightAnswer: 'is a JavaScript framework that supports binding data to elements that it then syncs and displays on web pages',
+        answers: [
+            {id:1,answer:'Codigo para compilar javascript'},
+            {id:2, answer: 'is a JavaScript framework that supports binding data to elements that it then syncs and displays on web pages'},
+            {id:3, answer:'Framework usado para criar REST APIs'}
+        ]
         
     });
 }
 
-writePerguntas(4)
 export const GameContext = createContext();
 
 const GameProvider = ({ children }) => {
@@ -53,7 +51,7 @@ const GameProvider = ({ children }) => {
 
    
 useEffect(() => {
-   
+    
     const data = []    
     const db = getDatabase();
         const postListRef =  ref(db, 'questions');
