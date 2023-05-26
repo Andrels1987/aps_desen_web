@@ -5,35 +5,38 @@ import { useRouter } from "next/router";
 import { GlobalContext } from "@/pages/context/GlobalContext"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { useContext, useState , useEffect} from "react";
+import { useContext, useState, useEffect } from "react";
+
+
 
 const Home = () => {
   const { life, QandA, setLife, score, setScore } = useContext(GameContext);
-  
+
   const [item, setItem] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
 
   const router = useRouter()
-    const { auth, signOut } = useContext( GlobalContext )
-    const handleClickSignOut = ( ) => {
-        signOut(auth)
-        router.push("/")
-    }
+  const { auth, signOut } = useContext(GlobalContext)
+  const handleClickSignOut = () => {
+    signOut(auth)
+    router.push("/")
+  }
 
-  useEffect(()=>{
-    console.log("QNDA",QandA)
-    const handleWindow = () =>{
-      window.addEventListener('resize', () =>{
+  useEffect(() => {
+    const handleWindow = () => {
+      window.addEventListener('resize', () => {
         let menu = document.querySelector("#mobile-menu")! as HTMLElement;
-        if(menu != null){
+        if (menu != null) {
           let width = window.innerWidth;
-          if(width > 640){      
-              menu.style.display = "none";          }
-        }});
-      }
+          if (width > 640) {
+            menu.style.display = "none";
+          }
+        }
+      });
+    }
     handleWindow();
 
-      return () => window.removeEventListener("resize", handleWindow);
+    return () => window.removeEventListener("resize", handleWindow);
   }, [])
   //
   const openMenu = () => {
@@ -44,7 +47,7 @@ const Home = () => {
       ? (menu.style.display = "block")
       : (menu.style.display = "none");
   };
-//compara a resposta do usuario com a resposta correta
+  //compara a resposta do usuario com a resposta correta
   const checkAnswer = function () {
     let rightAnswer = QandA[item].rightAnswer;
     if (userAnswer == rightAnswer) {
@@ -55,10 +58,10 @@ const Home = () => {
     }
     setItem(item => item + 1);
     let answer = document.querySelectorAll<HTMLElement>('.answers');
-      answer.forEach(element => {
-        let styles = getComputedStyle(element, "::after");
-        element.style.setProperty('--largura', '5px')               
-      });
+    answer.forEach(element => {
+      let styles = getComputedStyle(element, "::after");
+      element.style.setProperty('--largura', '5px')
+    });
   };
 
   //insere os icones de vida no header - CORAÇÕES
@@ -73,25 +76,23 @@ const Home = () => {
   //close menu click
   const closeMenuClick = () => {
     let menu = document.querySelector("#mobile-menu")! as HTMLElement;
-    menu.style.display = "none";  
+    menu.style.display = "none";
   }
 
   //esconder menu
- 
+  const handleUserAnswer = (event: any) => {
+    let answer = document.querySelectorAll<HTMLElement>('.answers');
+    answer.forEach(element => {
+      let styles = getComputedStyle(element, "::after");
+      element.style.setProperty('--largura', '5px')
+    });
 
-    const handleUserAnswer = (event:any) =>{
-      let answer = document.querySelectorAll<HTMLElement>('.answers');
-      answer.forEach(element => {
-        let styles = getComputedStyle(element, "::after");
-        element.style.setProperty('--largura', '5px')               
-      });
+    let target = event.target;
+    let styles = getComputedStyle(target, "::after");
+    target.style.setProperty('--largura', '100%')
 
-      let target = event.target;  
-      let styles = getComputedStyle(target, "::after");
-      target.style.setProperty('--largura', '100%')
-      
-      setUserAnswer(target.innerText);
-    }
+    setUserAnswer(target.innerText);
+  }
   return (
     <>
       <nav className="bg-gray-800 z-10-relative ">
@@ -148,7 +149,7 @@ const Home = () => {
                   >
                     Dashboard
                   </a>
-                  
+
                 </div>
               </div>
             </div>
@@ -161,17 +162,17 @@ const Home = () => {
               </button>
 
               <div className="relative ml-3">
-              <div>
+                <div>
                   <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-white"
-                      role="menuitem"
-                      tabIndex={-1}
-                      id="user-menu-item-2"
-                      onClick={handleClickSignOut}
-                    >
-                      Sair
-                    </a>
+                    href="#"
+                    className="block px-4 py-2 text-sm text-white"
+                    role="menuitem"
+                    tabIndex={-1}
+                    id="user-menu-item-2"
+                    onClick={handleClickSignOut}
+                  >
+                    Sair
+                  </a>
                 </div>
               </div>
             </div>
@@ -210,7 +211,7 @@ const Home = () => {
       </nav>
       <div className="score">{score}</div>
       <div
-      onClick={closeMenuClick}
+        onClick={closeMenuClick}
         style={{
           height: "100vh",
           background: "#F9F3BC",
@@ -219,7 +220,21 @@ const Home = () => {
           alignItems: "center",
         }}
       >
-        {life > 0 ? 
+        {life > 0 ? (
+          QandA.length == 0 ? (
+            <div style={{
+              height: "50%",
+              width: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#F3DB97",
+              position: "absolute",
+              fontSize: "2rem",
+              top: "25%",
+              color: "green"
+            }}>CARREGANDO PERGUNTAS</div>
+          ) : (
             item < QandA.length ? (
               <div
                 className="max-w-sm rounded overflow-hidden shadow-lg "
@@ -240,42 +255,43 @@ const Home = () => {
                     {QandA[item].question} ?
                   </div>
                   <div className="font-bold text-xl mb-2 ">
-                    {QandA[item].answers.map((a: any) => 
-                       (
-                        <div key={a.id} className="answers" onClick={(ev) =>handleUserAnswer(ev)}>
-                          <p                            
-                            className="text-gray-700 text-base py-4" 
-                            style={{padding : "0"}}                           
-                            >
-                            {a.answer}
-                          </p>
-                        </div>
-                      )
+                    {QandA[item].answers.map((a: any) =>
+                    (
+                      <div key={a.id} className="answers" onClick={(ev) => handleUserAnswer(ev)}>
+                        <p
+                          className="text-gray-700 text-base py-4"
+                          style={{ padding: "0" }}
+                        >
+                          {a.answer}
+                        </p>
+                      </div>
+                    )
                     )}
                   </div>
                 </div>
               </div>
-        ) : (
-          <div
-            style={{
-              height: "50%",
-              width: "90%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "#F3DB97",
-              position: "absolute",
-              top: "25%",
-            }}
-            className="max-w-sm rounded overflow-hidden shadow-lg"
-          >
-            <div className="px-6 py-4">
-              <div className="font-bold text-xl mb-2 text-yellow-600">
-                <h1>PERGUNTAS FINALIZADAS</h1>
+            ) : (
+              <div
+                style={{
+                  height: "50%",
+                  width: "90%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#F3DB97",
+                  position: "absolute",
+                  top: "25%",
+                }}
+                className="max-w-sm rounded overflow-hidden shadow-lg"
+              >
+                <div className="px-6 py-4">
+                  <div className="font-bold text-xl mb-2 text-yellow-600">
+                    <h1>PERGUNTAS FINALIZADAS</h1>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        ) : (
+            )
+          )) : (
           <div
             style={{
               height: "50%",
@@ -308,6 +324,7 @@ const Home = () => {
           Responder
         </button>
       </div>
+
     </>
   );
 }
