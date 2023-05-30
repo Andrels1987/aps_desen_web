@@ -10,25 +10,23 @@ import { useContext, useState, useEffect } from "react";
 
 
 const Home = () => {
+  const router = useRouter();
   const { life, QandA, setLife, score, setScore } = useContext(GameContext);
-  const { user } = useContext(GlobalContext);
-
- 
+  const { user } = useContext(GlobalContext); 
+  
 
   const [item, setItem] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
 
-  const router = useRouter()
   const { auth, signOut } = useContext(GlobalContext)
   const handleClickSignOut = () => {
     signOut(auth)
     router.push("/")
-  }
+  } 
 
-  useEffect(() => {
-    if(!user){
-      console.log("USER " ,user);    
-    }
+  useEffect(() => {    
+    console.log("USER: ", user);    
+    !user && router.push("/")
     const handleWindow = () => {
       window.addEventListener('resize', () => {
         let menu = document.querySelector("#mobile-menu")! as HTMLElement;

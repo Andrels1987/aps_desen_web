@@ -1,46 +1,23 @@
 import { useState, useContext, useEffect } from "react";
-import { useRouter } from "next/router";
+
 import ModalResetPassword from "@/components/modalResetPassword";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "../public/logo.png"
 import {GlobalContext} from  "@/pages/context/GlobalContext.js"
+import { useRouter } from "next/router";
 const Login = ()=>{
-    const [formSignIn, setFormSignIn] = useState({
-        email:"",
-        password:""
-    })
+    
     const [ showModalResetPassword, setShowModalResetPassword ] = useState(false)
     const router =  useRouter()
-    const {auth, signInWithEmailAndPassword} = useContext(GlobalContext)
 
-    const handleSignIn = ( ) => {
-        const {email, password} = formSignIn
-
-        if(email && password){
-
-            signInWithEmailAndPassword(auth, email, password)
-                .then((data: any) =>{
-                    router.push('/game')
-                })
-                .catch(( )=> alert("email ou senha errado"))
-
-            setFormSignIn({email:"",password:""})
-
-            return
-        }
-            alert("Preencha todos os campos corretamente")
-    }
+    const {user, handleSignIn, setFormSignIn} = useContext(GlobalContext)
+    user && router.push("/game")
+    
     const handleChangeValue = ({target}:any)=> {
-        setFormSignIn(old=>{ return {...old,[target.name]:target.value}})
+        setFormSignIn((old:any)=>{ return {...old,[target.name]:target.value}})
     }
-
-    useEffect(()=>{
-
-       return auth.onAuthStateChanged(( user:any) => {
-            user && router.push("/game")
-        })
-    },[])
+    
 
     return(
         <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
