@@ -18,15 +18,14 @@ const Home = () => {
   const [item, setItem] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
 
-  const { auth, signOut } = useContext(GlobalContext)
+  const { auth, signOut } = useContext(GlobalContext);
+
   const handleClickSignOut = () => {
     signOut(auth)
-    router.push("/")
+    user == null && router.push("/")
   } 
 
-  useEffect(() => {    
-    console.log("USER: ", user);    
-    !user && router.push("/")
+  useEffect(() => {  
     const handleWindow = () => {
       window.addEventListener('resize', () => {
         let menu = document.querySelector("#mobile-menu")! as HTMLElement;
@@ -39,9 +38,10 @@ const Home = () => {
       });
     }
     handleWindow();
-
+    
+    !user && router.push("/")
     return () => window.removeEventListener("resize", handleWindow);
-  }, [])
+  }, [user])
   //
   const openMenu = () => {
     let menu = document.querySelector("#mobile-menu")! as HTMLElement;
