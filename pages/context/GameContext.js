@@ -16,8 +16,7 @@ const GameProvider = ({ children }) => {
     const [score, setScore] = useState(0)
 
    
-useEffect(() => {
-    
+useEffect(() => {    
     const data = []    
     const db = getDatabase(app);
         const postListRef =  ref(db, 'questions');

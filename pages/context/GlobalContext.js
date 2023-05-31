@@ -2,63 +2,65 @@
 import { createContext, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import app from '../../firebase.config';
-import { getDatabase,
+import {
+    getDatabase,
     ref,
     set,
     child,
     get,
     remove,
-    onValue} from "firebase/database";
-import { getAuth,
+    onValue
+} from "firebase/database";
+import {
+    getAuth,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     sendEmailVerification,
     sendPasswordResetEmail,
-    signOut} from "firebase/auth";
+    signOut
+} from "firebase/auth";
 
 const auth = getAuth(app)
 
 const database = getDatabase(app);
 
-
-
 export const GlobalContext = createContext();
 
-const GlobalStorage = ({children})=>{
+const GlobalStorage = ({ children }) => {
     const router = useRouter();
-    const [formSignIn, setFormSignIn] = useState({
-        email:"",
-        password:""
-    })
     const [user, setUser] = useState(null)
-    const handleSignIn = ( ) => {
-        const {email, password} = formSignIn
-    
-        if(email && password){
-    
+    const [formSignIn, setFormSignIn] = useState({
+        email: "",
+        password: ""
+    })
+    const handleSignIn = () => {
+        const { email, password } = formSignIn
+        if (email && password) {
             signInWithEmailAndPassword(auth, email, password)
-                .then((data) =>{
+                .then((data) => {
                     setUser(data);
-                    data && router.push('/game')
+                    router.push('/game')
                 })
-                .catch(( )=> alert("email ou senha errado"))
-    
-            setFormSignIn({email:"",password:""})
-    
+                .catch(() => alert("email ou senha errado"))
+
+            setFormSignIn({ email: "", password: "" })
             return
         }
-            alert("Preencha todos os campos corretamente")
+        alert("Preencha todos os campos corretamente")
     }
-    useEffect(()=>{
-        return auth.onAuthStateChanged(( userlogged ) => {   
-            setUser(userlogged)           
-            user != null && router.push("/game")
+    useEffect(() => {
+        return auth.onAuthStateChanged((userlogged) => {
+            setUser(userlogged)
+            if(userlogged == null){
+                router.push("/")
+            }
         })
-    },[])
-    return(
-        <GlobalContext.Provider 
-            value={{ 
-                auth, 
+    }, [user])
+    
+    return (
+        <GlobalContext.Provider
+            value={{
+                auth,
                 createUserWithEmailAndPassword,
                 signInWithEmailAndPassword,
                 sendEmailVerification,
@@ -71,10 +73,12 @@ const GlobalStorage = ({children})=>{
                 remove,
                 child,
                 user,
+                setUser,
                 database,
                 handleSignIn,
-                formSignIn, 
-                setFormSignIn}}>
+                formSignIn,
+                setFormSignIn
+            }}>
             {children}
         </GlobalContext.Provider>
     )

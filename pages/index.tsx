@@ -10,15 +10,16 @@ const Login = ()=>{
     
     const [ showModalResetPassword, setShowModalResetPassword ] = useState(false)
     const router =  useRouter()
-
-    const {user, handleSignIn, setFormSignIn} = useContext(GlobalContext)
-    user && router.push("/game")
-    
+    const {handleSignIn, setFormSignIn, user} = useContext(GlobalContext)    
     const handleChangeValue = ({target}:any)=> {
         setFormSignIn((old:any)=>{ return {...old,[target.name]:target.value}})
     }
     
-
+    useEffect(() => {
+        if(user){
+            router.push("/game")
+        }
+    }, [user])
     return(
         <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
             {showModalResetPassword && <ModalResetPassword setShowModalResetPassword={ setShowModalResetPassword } />}

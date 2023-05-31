@@ -2,7 +2,7 @@
 
 import { GameContext } from "../context/GameContext"
 import { useRouter } from "next/router";
-import  {GlobalContext}  from "@/pages/context/GlobalContext"
+import { GlobalContext } from "@/pages/context/GlobalContext"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useContext, useState, useEffect } from "react";
@@ -12,20 +12,19 @@ import { useContext, useState, useEffect } from "react";
 const Home = () => {
   const router = useRouter();
   const { life, QandA, setLife, score, setScore } = useContext(GameContext);
-  const { user } = useContext(GlobalContext); 
-  
+  const { user } = useContext(GlobalContext);
+
 
   const [item, setItem] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
 
-  const { auth, signOut } = useContext(GlobalContext);
+  const { auth, signOut, setUser } = useContext(GlobalContext);
 
   const handleClickSignOut = () => {
-    signOut(auth)
-    user == null && router.push("/")
-  } 
+    signOut(auth)   
+  }
 
-  useEffect(() => {  
+  useEffect(() => {
     const handleWindow = () => {
       window.addEventListener('resize', () => {
         let menu = document.querySelector("#mobile-menu")! as HTMLElement;
@@ -38,8 +37,6 @@ const Home = () => {
       });
     }
     handleWindow();
-    
-    !user && router.push("/")
     return () => window.removeEventListener("resize", handleWindow);
   }, [user])
   //
@@ -96,6 +93,135 @@ const Home = () => {
     target.style.setProperty('--largura', '100%')
 
     setUserAnswer(target.innerText);
+  }
+
+  let content = null;
+  if (user == null) {
+    content = <div>Carregando...</div>
+  } else {
+    content = <div><div className="score">{score}</div>
+      <div
+        onClick={closeMenuClick}
+        style={{
+          height: "100vh",
+          background: "#F9F3BC",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        {life > 0 ? (
+          QandA.length == 0 ? (
+            <div style={{
+              height: "50%",
+              width: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#F3DB97",
+              position: "absolute",
+              fontSize: "2rem",
+              top: "25%",
+              color: "green"
+            }}>CARREGANDO PERGUNTAS</div>
+          ) : (
+            item < QandA.length ? (
+              <div
+                className="max-w-sm rounded overflow-hidden shadow-lg "
+                style={{
+                  height: "70%",
+                  width: "93%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#FFFFFF",
+                  position: "absolute",
+                  top: "15%",
+                  zIndex: "1"
+                }}
+              >
+                <div className="px-6 py-4">
+                  <div className="font-bold  mb-1 text-green-500 text-4xl question">
+                    {QandA[item].question} ?
+                  </div>
+                  <div className="font-bold text-xl mb-2 ">
+                    {QandA[item].answers.map((a: any) =>
+                    (
+                      <div key={a.id} className="answers" onClick={(ev) => handleUserAnswer(ev)}>
+                        <p
+                          className="text-gray-700 text-base py-4"
+                          style={{ padding: "0" }}
+                        >
+                          {a.answer}
+                        </p>
+                      </div>
+                    )
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div
+                style={{
+                  height: "50%",
+                  width: "90%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#F3DB97",
+                  position: "absolute",
+                  top: "25%",
+                }}
+                className="max-w-sm rounded overflow-hidden shadow-lg"
+              >
+                <div className="px-6 py-4">
+                  <div className="font-bold text-xl mb-2 text-yellow-600">
+                    <h1>PERGUNTAS FINALIZADAS</h1>
+                  </div>
+                </div>
+              </div>
+            )
+          )) : (
+          <div
+            style={{
+              height: "50%",
+              width: "90%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "#F3DB97",
+              position: "absolute",
+              top: "25%",
+            }}
+            className="max-w-sm rounded overflow-hidden shadow-lg"
+          >
+            <div className="px-6 py-4">
+              <div className="font-bold text-xl mb-2 text-yellow-600">
+                <h1>Sem vidas</h1>
+              </div>
+            </div>
+          </div>
+        )}
+        {life != 0 ? (
+          <button
+            style={{
+              position: "absolute",
+              top: "88%",
+            }}
+            onClick={checkAnswer}
+            className={`${QandA.length == item ? "disabled bg-gray-500" : "bg-blue-500 "} text-white font-bold py-2 px-4 rounded-full `}
+          >Responder
+          </button>
+        ) : (<button
+          style={{
+            position: "absolute",
+            top: "88%",
+          }}
+          onClick={() => window.location.reload()}
+          className={`${QandA.length == item ? "disabled bg-gray-500" : "bg-blue-500 "} text-white font-bold py-2 px-4 rounded-full `}
+        >Recomeçar
+        </button>)}
+      </div></div>
   }
   return (
     <>
@@ -213,122 +339,7 @@ const Home = () => {
           </div>
         </div>
       </nav>
-      <div className="score">{score}</div>
-      <div
-        onClick={closeMenuClick}
-        style={{
-          height: "100vh",
-          background: "#F9F3BC",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        {life > 0 ? (
-          QandA.length == 0 ? (
-            <div style={{
-              height: "50%",
-              width: "50%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "#F3DB97",
-              position: "absolute",
-              fontSize: "2rem",
-              top: "25%",
-              color: "green"
-            }}>CARREGANDO PERGUNTAS</div>
-          ) : (
-            item < QandA.length ? (
-              <div
-                className="max-w-sm rounded overflow-hidden shadow-lg "
-                style={{
-                  height: "70%",
-                  width: "93%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: "#FFFFFF",
-                  position: "absolute",
-                  top: "15%",
-                  zIndex: "1"
-                }}
-              >
-                <div className="px-6 py-4">
-                  <div className="font-bold  mb-1 text-green-500 text-4xl question">
-                    {QandA[item].question} ?
-                  </div>
-                  <div className="font-bold text-xl mb-2 ">
-                    {QandA[item].answers.map((a: any) =>
-                    (
-                      <div key={a.id} className="answers" onClick={(ev) => handleUserAnswer(ev)}>
-                        <p
-                          className="text-gray-700 text-base py-4"
-                          style={{ padding: "0" }}
-                        >
-                          {a.answer}
-                        </p>
-                      </div>
-                    )
-                    )}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div
-                style={{
-                  height: "50%",
-                  width: "90%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: "#F3DB97",
-                  position: "absolute",
-                  top: "25%",
-                }}
-                className="max-w-sm rounded overflow-hidden shadow-lg"
-              >
-                <div className="px-6 py-4">
-                  <div className="font-bold text-xl mb-2 text-yellow-600">
-                    <h1>PERGUNTAS FINALIZADAS</h1>
-                  </div>
-                </div>
-              </div>
-            )
-          )) : (
-          <div
-            style={{
-              height: "50%",
-              width: "90%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "#F3DB97",
-              position: "absolute",
-              top: "25%",
-            }}
-            className="max-w-sm rounded overflow-hidden shadow-lg"
-          >
-            <div className="px-6 py-4">
-              <div className="font-bold text-xl mb-2 text-yellow-600">
-                <h1>Sem vidas</h1>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <button
-          style={{
-            position: "absolute",
-            top: "88%",
-          }}
-          onClick={checkAnswer}
-          className={`${QandA.length == item ? "disabled bg-gray-500" : "bg-blue-500 "} text-white font-bold py-2 px-4 rounded-full `}
-        >
-          Responder
-        </button>
-      </div>
-
+      {content}
     </>
   );
 }
